@@ -28,7 +28,7 @@ Avant de commencer, assurez-vous d'avoir les outils suivants installés sur votr
 Pour lancer le serveur de développement et voir votre site en local :
 
 ```sh
-    yarn start
+    yarn dev
 ```
 
 Le site sera disponible à l'adresse : [http://localhost:1313](http://localhost:1313).
