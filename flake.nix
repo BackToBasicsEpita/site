@@ -13,7 +13,7 @@
     devShells.${system}.default = pkgs.mkShell {
       buildInputs = with pkgs; [
       git
-      node_20
+      nodejs_20
       yarn
     ];
 
