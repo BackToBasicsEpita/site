@@ -20,6 +20,7 @@
     shellHook = ''
       clear
       echo "Welcome to the flake :)"
+      yarn install
     '';
 
   };
