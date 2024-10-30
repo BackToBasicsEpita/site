@@ -7,6 +7,6 @@ date: "2023-08-26T20:43:23+01:00"
 lastmod: "2023-08-26T20:43:23+01:00"
 draft: false
 
-ressource: "https://moodle.cri.epita.fr/course/view.php?id=1491"
+ressource: "https://moodle.epita.fr/mod/forum/view.php?id=27403"
 ---
 

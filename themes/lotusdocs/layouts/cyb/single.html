@@ -1,0 +1,70 @@
+{{ define "main" }}
+
+    {{ with .Params.redif_url }}
+    <script>
+        // Récupérer l'URL depuis les paramètres front matter
+        var originalUrl = "{{ . }}";
+        
+        // Créer une URL objet pour manipuler les paramètres
+        var url = new URL(originalUrl);
+        
+        // Retirer le paramètre 't' s'il est présent
+        url.searchParams.delete('t');
+        
+        // Rediriger vers l'URL nettoyée
+        document.location = url.toString();
+    </script>
+    {{ end }}
+
+    {{ with .Params.ressource }}
+    <script>
+        // Récupérer l'URL depuis les paramètres front matter
+        var ressource = "{{ . }}";
+        
+        // Vérifiez si l'URL ressource est valide
+        if (ressource) {
+            // Construire l'URL complète en ajoutant le protocole, l'hôte et le chemin
+            var url = new URL(ressource, window.location.origin);
+            
+            // Rediriger vers l'URL nettoyée
+            window.location.href = url.toString();
+        }
+    </script>
+{{ end }}
+
+    <!-- override Prism's default copy messages to 'empty'. Required by CSS styling.
+         see: https://prismjs.com/plugins/copy-to-clipboard/#styling -->
+    <div data-prismjs-copy="" data-prismjs-copy-success="" data-prismjs-copy-error="">
+        {{ .Content }}
+    </div>
+
+    {{ if and .GitInfo .Site.Params.docs.repoURL -}}
+        {{ partial (printf "%s/%s" ($.Scratch.Get "pathName") "gitinfo") . }}
+    {{ end -}}
+
+    {{ if .Page.Store.Get "hasMermaid" }}
+    {{ $mermaid := resources.Get (printf "%s/%s" ($.Scratch.Get "pathName") "js/mermaid.min.js") }}
+    {{ if hugo.IsProduction }}
+        {{ $mermaid = $mermaid | fingerprint "sha384" }}
+    {{ end }}
+    <script src="{{ $mermaid.RelPermalink }}" {{ if hugo.IsProduction }}integrity="{{ $mermaid.Data.Integrity }}"{{ end }}></script>
+    <script>
+        const config = {
+            startOnLoad:true,
+            logLevel: "error",
+            align: "center",
+            theme:"null"
+        };
+        mermaid.initialize(config);
+    </script>
+    {{ end }}
+
+    {{ if .Site.Params.feedback.enabled | default false -}}
+        {{ if or (.Site.Params.plausible.dataDomain) (.Site.GoogleAnalytics) }}
+            {{- partial (printf "%s/%s" ($.Scratch.Get "pathName") "footer/feedback.html") . -}}
+        {{ else }}
+            {{ errorf "Either Google Analytics or Plausible Analytics must be configured before enabling the Feedback Widget." }}
+        {{ end }}
+    {{ end -}}
+
+{{ end }}
